@@ -1,5 +1,7 @@
 package com.springboot.university.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.List;
@@ -16,6 +18,7 @@ public class Teacher {
     private String email;
     private String degree;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "teacher")
     private Set<Course> courses = new HashSet<>();
 
@@ -24,6 +27,10 @@ public class Teacher {
         this.lastName = lastName;
         this.email = email;
         this.degree = degree;
+    }
+
+    public Teacher(){
+
     }
 
     public Long getId() {
@@ -72,5 +79,12 @@ public class Teacher {
 
     public void setCourses(Set<Course> courses) {
         this.courses = courses;
+    }
+
+    public void addCourse(Course course){
+        this.courses.add(course);
+    }
+    public void deleteCourse(Course course){
+        this.courses.remove(course);
     }
 }

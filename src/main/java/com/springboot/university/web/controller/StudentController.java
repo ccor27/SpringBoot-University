@@ -25,7 +25,7 @@ public class StudentController {
         }
     }
 
-    @GetMapping("/find/{id}")
+    @GetMapping("/find/id/{id}")
     public ResponseEntity<Student> findById(@PathVariable("id") Long id){
        Student student = studentService.findById(id);
         if(student!=null){
@@ -35,7 +35,7 @@ public class StudentController {
         }
     }
 
-    @GetMapping("/find/{name}")
+    @GetMapping("/find/name/{name}")
     public ResponseEntity<Student> findByName(@PathVariable("name") String name){
         Student student = studentService.findByName(name);
         if(student!=null){
@@ -44,7 +44,7 @@ public class StudentController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-    @GetMapping("/find/{email}")
+    @GetMapping("/find/email/{email}")
     public ResponseEntity<Student> findByEmail(@PathVariable("email") String email){
         Student student = studentService.findByEmail( email);
         if(student!=null){
@@ -61,13 +61,22 @@ public class StudentController {
         if(list!=null){
             return new ResponseEntity<>(list,HttpStatus.FOUND);
         }else{
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
     }
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity delete(@PathVariable("id") Long id){
-        if (studentService.delete(id)){
+         Student student = findById(id).getBody();
+
+        if (student!=null){
+
+            student.getCourses().stream().forEach(course -> {
+                student.deleteCourse(course);
+                course.deleteStudent(student);
+              });
+
+            studentService.delete(id);
             return new ResponseEntity<>(HttpStatus.ACCEPTED);
         }else{
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -75,7 +84,14 @@ public class StudentController {
     }
     @DeleteMapping("/delete/all")
     public ResponseEntity deleteAll(){
-        if (studentService.deleteAll()){
+        if (studentService.findAll()!=null){
+            findAll().getBody().stream().forEach(student -> {
+                student.getCourses().stream().forEach(course -> {
+                    student.deleteCourse(course);
+                    course.deleteStudent(student);
+                });
+            });
+            studentService.deleteAll();
             return new ResponseEntity<>(HttpStatus.ACCEPTED);
         }else{
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);

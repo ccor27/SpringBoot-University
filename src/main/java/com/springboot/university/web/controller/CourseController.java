@@ -32,7 +32,7 @@ public class CourseController {
         if(list!=null){
             return new ResponseEntity<>(list,HttpStatus.FOUND);
         }else{
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
     }
 
@@ -48,7 +48,14 @@ public class CourseController {
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity delete(@PathVariable("id") Long id){
-        if(courseService.delete(id)){
+        Course course = findById(id).getBody();
+        if(course!=null){
+            course.getStudents()
+                    .stream().forEach(student -> {
+                      course.deleteStudent(student);
+                      student.deleteCourse(course);
+                    });
+            courseService.delete(id);
             return new ResponseEntity(HttpStatus.ACCEPTED);
         }else{
             return new ResponseEntity(HttpStatus.NO_CONTENT);
@@ -57,7 +64,14 @@ public class CourseController {
 
     @DeleteMapping("/delete/all")
     public ResponseEntity deleteAll(){
-        if(courseService.deleteAll()){
+        if(findAll().getBody()!=null){
+            findAll().getBody().stream().forEach(course -> {
+                course.getStudents().stream().forEach(student -> {
+                    course.deleteStudent(student);
+                    student.deleteCourse(course);
+                });
+            });
+            courseService.deleteAll();
             return new ResponseEntity(HttpStatus.ACCEPTED);
         }else{
             return new ResponseEntity(HttpStatus.NO_CONTENT);

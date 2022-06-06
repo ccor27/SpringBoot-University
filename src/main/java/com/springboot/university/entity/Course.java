@@ -17,7 +17,7 @@ public class Course {
     @JoinColumn(name = "teacher_id",referencedColumnName = "id")
     private Teacher teacher;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name="students_enrolled",
             joinColumns = @JoinColumn(name ="course_id"),
@@ -34,6 +34,9 @@ public class Course {
         this.description = description;
     }
 
+    public Course(){
+
+    }
     public Set<Student> getStudents() {
         return students;
     }
@@ -74,6 +77,16 @@ public class Course {
 
     public void setTeacher(Teacher teacher) {
         this.teacher = teacher;
+    }
+
+    public void addStudent(Student student){
+        this.students.add(student);
+    }
+    public void deleteStudent(Student student){
+        this.students.remove(student);
+    }
+    public void deleteTeacher(){
+        this.teacher=null;
     }
 
 }

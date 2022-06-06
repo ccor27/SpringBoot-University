@@ -61,4 +61,18 @@ public class Student {
         this.email = email;
     }
 
+    public void addCourse(Course course){
+        this.courses.add(course);
+    }
+    public void deleteCourse(Course course){
+        this.courses.remove(course);
+    }
+
+    public Set<Course> getCourses() {
+        return courses;
+    }
+
+    public void setCourses(Set<Course> courses) {
+        this.courses = courses;
+    }
 }

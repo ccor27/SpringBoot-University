@@ -1,18 +1,25 @@
 package com.springboot.university.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
+@ApiModel("Class that represent a Student")
 public class Student {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @ApiModelProperty("It's create by the application, it's to identify the student")
     private Long id;
+    @ApiModelProperty("It's the name of the student")
     private String name;
+    @ApiModelProperty("It's the last name of the student")
     private String lastName;
+    @ApiModelProperty("It's the email of the student")
     private String email;
 
     @JsonIgnore

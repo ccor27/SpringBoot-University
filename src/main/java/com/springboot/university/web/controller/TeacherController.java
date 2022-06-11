@@ -2,6 +2,7 @@ package com.springboot.university.web.controller;
 
 import com.springboot.university.entity.Teacher;
 import com.springboot.university.service.TeacherService;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,7 @@ public class TeacherController {
     @Autowired
     private TeacherService teacherService;
 
+    @ApiOperation("Method to find a Teacher by id")
     @GetMapping("/find/id/{id}")
     public ResponseEntity<Teacher> findById(@PathVariable("id") Long id){
         Teacher teacher = teacherService.findById(id);
@@ -26,6 +28,7 @@ public class TeacherController {
         }
     }
 
+    @ApiOperation("Method to find a Teacher by name")
     @GetMapping("/find/name/{name}")
     public ResponseEntity<Teacher> findByName(@PathVariable("name") String name){
         Teacher teacher = teacherService.findByName(name);
@@ -36,6 +39,7 @@ public class TeacherController {
         }
     }
 
+    @ApiOperation("Method to find a Teacher by email")
     @GetMapping("/find/email/{email}")
     public ResponseEntity<Teacher> findByEmail(@PathVariable("email") String email){
         Teacher teacher = teacherService.findByEmail(email);
@@ -45,7 +49,7 @@ public class TeacherController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-
+    @ApiOperation("Method to find all Teachers")
     @GetMapping("/find/all")
     public ResponseEntity<List<Teacher>> findAll(){
         if(teacherService.findAll()!=null){
@@ -55,6 +59,7 @@ public class TeacherController {
         }
     }
 
+    @ApiOperation("Method to create a Teacher")
     @PostMapping("/create")
     public ResponseEntity<Teacher> save(@RequestBody Teacher teacher){
         Teacher t = teacherService.save(teacher);
@@ -65,6 +70,7 @@ public class TeacherController {
         }
     }
 
+    @ApiOperation("Method to delete a Teacher by id")
     @DeleteMapping("/delete/{id}")
     public ResponseEntity delete(@PathVariable("id") Long id){
         Teacher teacher = findById(id).getBody();
@@ -80,6 +86,7 @@ public class TeacherController {
         }
     }
 
+    @ApiOperation("Method to delete all Teachers")
     @DeleteMapping("/delete/all")
     public ResponseEntity deleteAll(){
         if(!findAll().getBody().isEmpty()){

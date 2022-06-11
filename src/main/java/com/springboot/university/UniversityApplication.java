@@ -12,8 +12,10 @@ import com.springboot.university.service.TeacherService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @SpringBootApplication
+@EnableWebMvc
 public class UniversityApplication {
 
 	public static void main(String[] args) {
